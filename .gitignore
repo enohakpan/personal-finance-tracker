@@ -1,0 +1,18 @@
+# Compiled programs and object files
+finance_tracker
+finance_tracker.exe
+finance_tests
+finance_tests.exe
+*.o
+*.obj
+*.exe
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime transaction data
+data/transactions.txt
+data/test_transactions.txt
