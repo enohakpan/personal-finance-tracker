@@ -7,12 +7,14 @@
 #include <iostream>
 
 namespace {
+// Floating-point calculations use a tolerance instead of exact equality.
 bool nearlyEqual(double left, double right) {
     return std::abs(left - right) < 0.001;
 }
 } // namespace
 
 int main() {
+    // Verify calendar validation, including leap-year behavior and format checks.
     assert(InputHelper::isValidDate("2024-02-29"));
     assert(!InputHelper::isValidDate("2023-02-29"));
     assert(!InputHelper::isValidDate("09/19/2026"));
@@ -20,6 +22,7 @@ int main() {
     FinanceManager manager;
     assert(manager.isEmpty());
 
+    // Build a representative collection containing both transaction types.
     manager.addTransaction(
         "2026-09-19", "Monthly Salary", "Work", 2500.0,
         TransactionType::Income);
@@ -35,6 +38,7 @@ int main() {
     assert(nearlyEqual(manager.calculateExpenses(), 225.0));
     assert(nearlyEqual(manager.calculateBalance(), 2275.0));
 
+    // Search and category comparisons should be case-insensitive.
     assert(manager.searchByDescription("salary").size() == 1);
     assert(manager.searchByDescription("BUS").size() == 1);
     assert(manager.searchByDescription("missing").empty());
@@ -45,6 +49,7 @@ int main() {
     manager.sortByDate(false);
     manager.sortByCategory(true);
 
+    // A save/load round trip must preserve the records and calculated balance.
     const char* testFile = "data/test_transactions.txt";
     assert(manager.saveToFile(testFile));
 

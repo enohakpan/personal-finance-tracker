@@ -8,6 +8,7 @@
 namespace {
 const std::string DATA_FILE = "data/transactions.txt";
 
+// Prints the choices available in the main application loop.
 void displayMenu() {
     std::cout << "\n========================================\n"
               << "       PERSONAL FINANCE TRACKER\n"
@@ -24,6 +25,7 @@ void displayMenu() {
               << "0. Exit\n";
 }
 
+// Collects validated fields and delegates storage to FinanceManager.
 void addTransaction(FinanceManager& manager, TransactionType type) {
     std::cout << "\n========== ADD "
               << (type == TransactionType::Income ? "INCOME" : "EXPENSE")
@@ -43,6 +45,7 @@ void addTransaction(FinanceManager& manager, TransactionType type) {
               << " added successfully.\n";
 }
 
+// Displays transactions whose descriptions contain the user's search term.
 void searchTransactions(const FinanceManager& manager) {
     const std::string term =
         InputHelper::readRequiredText("Enter description search term: ");
@@ -50,6 +53,7 @@ void searchTransactions(const FinanceManager& manager) {
         manager.searchByDescription(term), "SEARCH RESULTS");
 }
 
+// Handles the filter submenu without modifying the original collection.
 void filterTransactions(const FinanceManager& manager) {
     std::cout << "\n========== FILTER TRANSACTIONS ==========\n"
               << "1. Show all\n"
@@ -88,6 +92,7 @@ void filterTransactions(const FinanceManager& manager) {
     }
 }
 
+// Selects a sort field and direction, then displays the reordered collection.
 void sortTransactions(FinanceManager& manager) {
     std::cout << "\n========== SORT TRANSACTIONS ==========\n"
               << "1. Sort by amount\n"
@@ -118,6 +123,7 @@ void sortTransactions(FinanceManager& manager) {
     manager.displayTransactions();
 }
 
+// Converts the manager's save result into a user-facing message.
 void saveData(const FinanceManager& manager) {
     if (manager.saveToFile(DATA_FILE)) {
         std::cout << "Transactions saved successfully.\n";
@@ -126,6 +132,7 @@ void saveData(const FinanceManager& manager) {
     }
 }
 
+// Loads saved data and reports missing or malformed records safely.
 void loadData(FinanceManager& manager, bool startup) {
     const LoadResult result = manager.loadFromFile(DATA_FILE);
     if (!result.fileFound) {
@@ -150,10 +157,12 @@ int main() {
     FinanceManager manager;
 
     std::cout << "Welcome to the Personal Finance Tracker.\n";
+    // Restore the previous session when a save file is available.
     loadData(manager, true);
 
     try {
         bool running = true;
+        // Continue dispatching menu choices until the user selects Exit.
         while (running) {
             displayMenu();
             const int choice =

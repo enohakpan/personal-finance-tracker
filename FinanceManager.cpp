@@ -14,6 +14,7 @@
 #include <utility>
 
 namespace {
+// These parsers require the entire field to be valid, not just its prefix.
 bool parseInteger(const std::string& text, int& value) {
     std::istringstream input(text);
     char extra = '\0';
@@ -27,6 +28,7 @@ bool parseAmount(const std::string& text, double& value) {
            && std::isfinite(value) && value > 0.0;
 }
 
+// Splits one saved record while preserving an empty final field for validation.
 std::vector<std::string> splitRecord(const std::string& line) {
     std::vector<std::string> fields;
     std::stringstream input(line);
@@ -127,6 +129,7 @@ double FinanceManager::calculateBalance() const {
 std::vector<Transaction> FinanceManager::searchByDescription(
     const std::string& term) const {
     std::vector<Transaction> matches;
+    // Normalize both strings so search behavior is case-insensitive.
     const std::string normalizedTerm = toLower(term);
 
     for (const Transaction& transaction : transactions_) {
@@ -162,6 +165,7 @@ std::vector<Transaction> FinanceManager::filterByCategory(
 }
 
 void FinanceManager::sortByAmount(bool ascending) {
+    // stable_sort preserves the existing order when two amounts are equal.
     std::stable_sort(
         transactions_.begin(),
         transactions_.end(),
@@ -198,6 +202,7 @@ void FinanceManager::sortByCategory(bool ascending) {
 
 bool FinanceManager::saveToFile(const std::string& filename) const {
     const std::filesystem::path path(filename);
+    // Create the data directory automatically on a first run.
     if (path.has_parent_path()) {
         std::error_code error;
         std::filesystem::create_directories(path.parent_path(), error);
@@ -229,6 +234,7 @@ LoadResult FinanceManager::loadFromFile(const std::string& filename) {
     int highestId = 0;
     std::string line;
 
+    // Invalid records are counted and skipped so one bad line cannot crash loading.
     while (std::getline(input, line)) {
         if (InputHelper::trim(line).empty()) {
             continue;
@@ -264,7 +270,9 @@ LoadResult FinanceManager::loadFromFile(const std::string& filename) {
         highestId = std::max(highestId, id);
     }
 
+    // Replace existing data only after the complete file has been processed.
     transactions_ = std::move(loadedTransactions);
+    // Continue IDs above the largest loaded ID to avoid future duplicates.
     nextId_ = highestId + 1;
     return {true, transactions_.size(), skipped};
 }

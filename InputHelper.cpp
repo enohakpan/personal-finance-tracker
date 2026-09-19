@@ -19,6 +19,7 @@ int InputHelper::readIntInRange(const std::string& prompt, int minimum, int maxi
         int value = 0;
         char extra = '\0';
 
+        // Reading an extra character rejects partial values such as "3abc".
         if ((input >> value) && !(input >> extra) && value >= minimum && value <= maximum) {
             return value;
         }
@@ -41,6 +42,7 @@ double InputHelper::readPositiveAmount(const std::string& prompt) {
         double amount = 0.0;
         char extra = '\0';
 
+        // isfinite rejects special floating-point values such as infinity and NaN.
         if ((input >> amount) && !(input >> extra) && std::isfinite(amount) && amount > 0.0) {
             return amount;
         }
@@ -59,6 +61,7 @@ std::string InputHelper::readRequiredText(const std::string& prompt) {
         }
 
         value = trim(value);
+        // Pipes are reserved as separators in the transaction data file.
         if (!value.empty() && !containsDelimiter(value)) {
             return value;
         }
@@ -106,6 +109,7 @@ std::string InputHelper::trim(const std::string& text) {
 }
 
 bool InputHelper::isValidDate(const std::string& date) {
+    // Check the shape before using substrings and numeric conversion.
     if (date.size() != 10 || date[4] != '-' || date[7] != '-') {
         return false;
     }
@@ -130,6 +134,7 @@ bool InputHelper::isValidDate(const std::string& date) {
         31, 31, 30, 31, 30, 31
     };
     int maximumDay = daysInMonth[month - 1];
+    // February gains one day under the Gregorian leap-year rules.
     if (month == 2 && isLeapYear(year)) {
         maximumDay = 29;
     }

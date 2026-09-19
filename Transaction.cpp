@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
+// The default values provide a safe placeholder object when one is needed.
 Transaction::Transaction()
     : id_(0), amount_(0.0), type_(TransactionType::Expense) {
 }
@@ -71,6 +72,7 @@ std::string Transaction::getTypeName() const {
 
 std::string Transaction::toFileString() const {
     std::ostringstream output;
+    // Two decimal places keep saved monetary values consistent and readable.
     output << id_ << '|'
            << date_ << '|'
            << description_ << '|'
