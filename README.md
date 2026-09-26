@@ -35,6 +35,12 @@ Run on Windows:
 .\finance_tracker.exe
 ```
 
+Or use the helper script to compile and run in one step:
+
+```powershell
+.\run_app.bat
+```
+
 ## Features
 
 - Add income and expense transactions with automatically generated IDs.
