@@ -8,11 +8,11 @@ I created this software to strengthen my understanding of C++ by applying the la
 
 The demonstration video will show the application running, walk through the main parts of the source code, and explain the C++ syntax and concepts I learned.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/3l_1l9_3b_Q)
 
 ## Development Environment
 
-The project was developed in Cursor on Windows. Git and GitHub are used for version control and maintaining the project repository. The application can be compiled from a terminal with a C++ compiler such as GNU `g++`.
+The project was developed in VSCode on Windows. Git and GitHub are used for version control and maintaining the project repository. The application can be compiled from a terminal with a C++ compiler such as GNU `g++`.
 
 The software is written in C++ and uses the C++ Standard Library. Important library features include:
 
